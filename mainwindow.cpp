@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMessageBox>
+
 #include "labirinth.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -8,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    labirinth = new Labirinth(5, 5);
-    updateMap();
+    labirinth = new Labirinth(8, 8);
+    updateTableView();
 }
 
 MainWindow::~MainWindow()
@@ -19,11 +21,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_solve_clicked()
 {
-    labirinth->solve();
-    updateMap();
+    int steps = labirinth->solve();
+    updateTableView();
+    QMessageBox::warning(this, "Amount fo steps", QString::number(steps));
 }
 
-void MainWindow::updateMap()
+void MainWindow::updateTableView()
 {
     delete ui->tableView->model();
     QStandardItemModel *model = labirinth->getModel();
@@ -36,6 +39,12 @@ void MainWindow::updateMap()
         int y = item->row();
         int x = item->column();
         labirinth->setValue(x, y, ch);
-        updateMap();
+        updateTableView();
     });
+}
+
+void MainWindow::on_clear_clicked()
+{
+    labirinth->clear();
+    updateTableView();
 }

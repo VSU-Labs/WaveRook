@@ -21,7 +21,7 @@ public:
     int getPlayerX() const;
     int getPlayerY() const;
 
-    void solve();
+    int solve();
     void clear();
 
 private:
@@ -35,6 +35,7 @@ private:
 
     bool pointInMap(Point p);
     bool isEmpty(Point p);
+    bool isExit(Point p);
 private:
     int w, h;
     int pX = 0;

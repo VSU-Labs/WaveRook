@@ -17,10 +17,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void updateMap();
+    void updateTableView();
 
 private slots:
     void on_solve_clicked();
+
+    void on_clear_clicked();
 
 private:
     Labirinth *labirinth;

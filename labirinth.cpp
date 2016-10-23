@@ -158,12 +158,18 @@ bool Labirinth::isEmpty(Labirinth::Point p)
     return map[p.y][p.x] == Cell::EMPTY;
 }
 
+bool Labirinth::isExit(Labirinth::Point p)
+{
+    return map[p.y][p.x] == Cell::EXIT;
+}
 
-void Labirinth::solve()
+
+int Labirinth::solve()
 {
     clear();
 
     const Labirinth::Point direction[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    int steps = w * h;
     std::queue<Point> queue;
     queue.push({pX, pY});
 
@@ -172,16 +178,23 @@ void Labirinth::solve()
         queue.pop();
         for (Point d : direction) {
             Point cur = p + d;
-            while (pointInMap(cur) && isEmpty(cur)) {
+            while (pointInMap(cur) && (isEmpty(cur) || isExit(cur))) {
                 int step = static_cast<int>(map[p.y][p.x]) + 1;
+                if (isExit(cur)) {
+                    steps = std::min(step, steps);
+                }
                 map[cur.y][cur.x] = static_cast<Cell>(step);
                 queue.push(cur);
                 cur += d;
             }
         }
-
     }
-    qDebug() << "!";
+
+    if (steps == w * h)
+        return -1;
+
+    setExit(eX, eY);
+    return steps;
 }
 
 void Labirinth::clear()
