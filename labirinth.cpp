@@ -4,7 +4,7 @@
 #include <queue>
 
 Labirinth::Labirinth(int w, int h)
-    : w(w), h(h)
+    : w(w), h(h), eX(w - 1), eY(h - 1)
 {
     std::vector<Cell> row(w, Cell::EMPTY);
     map.resize(h, row);
