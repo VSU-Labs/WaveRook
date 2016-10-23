@@ -163,7 +163,6 @@ bool Labirinth::isExit(Labirinth::Point p)
     return map[p.y][p.x] == Cell::EXIT;
 }
 
-
 int Labirinth::solve()
 {
     clear();
@@ -183,8 +182,11 @@ int Labirinth::solve()
                 if (isExit(cur)) {
                     steps = std::min(step, steps);
                 }
-                map[cur.y][cur.x] = static_cast<Cell>(step);
-                queue.push(cur);
+                int value = static_cast<int>(map[cur.y][cur.x]);
+                if (value != 0 || value >= step) {
+                    map[cur.y][cur.x] = static_cast<Cell>(step);
+                    queue.push(cur);
+                }
                 cur += d;
             }
         }
