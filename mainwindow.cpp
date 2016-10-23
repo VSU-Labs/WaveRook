@@ -23,7 +23,13 @@ void MainWindow::on_solve_clicked()
 {
     int steps = labirinth->solve();
     updateTableView();
-    QMessageBox::warning(this, "Amount fo steps", QString::number(steps));
+    QString text;
+    if (steps == -1)
+        text = "Impossible to exit";
+    else
+        text = "Amount of steps to exit: " + QString::number(steps);
+
+    QMessageBox::warning(this, "Result", text);
 }
 
 void MainWindow::updateTableView()
