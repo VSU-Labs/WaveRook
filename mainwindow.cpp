@@ -17,6 +17,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_solve_clicked()
+{
+    labirinth->solve();
+}
+
 void MainWindow::updateMap()
 {
     delete ui->tableView->model();

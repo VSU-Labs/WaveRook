@@ -18,6 +18,8 @@ public:
     int getPlayerX() const;
     int getPlayerY() const;
 
+    void solve();
+
 private:
     enum class Cell {
         WALL = -2, PLAYER = -1, EMPTY = 0

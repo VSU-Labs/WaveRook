@@ -19,6 +19,9 @@ public:
 
     void updateMap();
 
+private slots:
+    void on_solve_clicked();
+
 private:
     Labirinth *labirinth;
     Ui::MainWindow *ui;

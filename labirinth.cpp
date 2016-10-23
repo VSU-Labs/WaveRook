@@ -86,6 +86,11 @@ int Labirinth::getPlayerY() const
     return pY;
 }
 
+void Labirinth::solve()
+{
+    qDebug() << "!";
+}
+
 QString Labirinth::cellToString(Labirinth::Cell cell)
 {
     switch (cell) {
