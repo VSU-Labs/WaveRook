@@ -49,6 +49,22 @@
      <string>Solve</string>
     </property>
    </widget>
+   <widget class="QLabel" name="buttons">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>270</y>
+      <width>361</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>X — player, # — wall, &lt;space&gt; — empty cell, E — exit</string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

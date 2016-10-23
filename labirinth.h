@@ -9,9 +9,12 @@ class Labirinth
 {
 public:
     Labirinth(int w, int h);
+
     void setWall(int x, int y);
     void setPlayer(int x, int y);
+    void setExit(int x, int y);
     void removeWall(int x, int y);
+
     void setValue(int x, int y, QString s);
     QStandardItemModel* getModel() const;
     QString getCh(int x, int y) const;
@@ -22,7 +25,7 @@ public:
 
 private:
     enum class Cell {
-        WALL = -2, PLAYER = -1, EMPTY = 0
+        EXIT = -3, WALL = -2, PLAYER = -1, EMPTY = 0
     };
 
     static QString cellToString(Cell cell);
@@ -30,6 +33,8 @@ private:
     int w, h;
     int pX = 0;
     int pY = 0;
+    int eX = 1;
+    int eY = 1;
     std::vector<std::vector<Cell>> labirinthMap;
 };
 

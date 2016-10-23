@@ -8,12 +8,18 @@ Labirinth::Labirinth(int w, int h)
     std::vector<Cell> row(w, Cell::EMPTY);
     labirinthMap.resize(h, row);
     labirinthMap[pX][pY] = Cell::PLAYER;
+    labirinthMap[eX][eY] = Cell::EXIT;
 }
 
 void Labirinth::setWall(int x, int y)
 {
     if (x == pX && y == pY) {
         qWarning() << "Can't put wall and player in one cell";
+        return;
+    }
+
+    if (x == eX && y == eY) {
+        qWarning() << "Can't put wall and exit in one cell";
         return;
     }
 
@@ -28,6 +34,14 @@ void Labirinth::setPlayer(int x, int y)
     pY = y;
 }
 
+void Labirinth::setExit(int x, int y)
+{
+    labirinthMap[eY][eX] = Cell::EMPTY;
+    labirinthMap[y][x] = Cell::EXIT;
+    eX = x;
+    eY = y;
+}
+
 void Labirinth::removeWall(int x, int y)
 {
     if (labirinthMap[y][x] == Cell::WALL) {
@@ -39,6 +53,9 @@ void Labirinth::setValue(int x, int y, QString s)
 {
     Cell cell = stringToCell(s);
     switch (cell) {
+    case Cell::EXIT:
+        setExit(x, y);
+        break;
     case Cell::PLAYER:
         setPlayer(x, y);
         break;
@@ -94,6 +111,8 @@ void Labirinth::solve()
 QString Labirinth::cellToString(Labirinth::Cell cell)
 {
     switch (cell) {
+    case Cell::EXIT:
+        return QString("E");
     case Cell::EMPTY:
         return QString(" ");
     case Cell::WALL:
@@ -107,6 +126,9 @@ QString Labirinth::cellToString(Labirinth::Cell cell)
 
 Labirinth::Cell Labirinth::stringToCell(QString ch)
 {
+    if (ch == "e" || ch == "E")
+        return Cell::EXIT;
+
     if (ch == " " || ch == "")
         return Cell::EMPTY;
 
