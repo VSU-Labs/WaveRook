@@ -1,14 +1,15 @@
 #include "labirinth.h"
 
 #include <QDebug>
+#include <queue>
 
 Labirinth::Labirinth(int w, int h)
     : w(w), h(h)
 {
     std::vector<Cell> row(w, Cell::EMPTY);
-    labirinthMap.resize(h, row);
-    labirinthMap[pX][pY] = Cell::PLAYER;
-    labirinthMap[eX][eY] = Cell::EXIT;
+    map.resize(h, row);
+    map[pX][pY] = Cell::PLAYER;
+    map[eX][eY] = Cell::EXIT;
 }
 
 void Labirinth::setWall(int x, int y)
@@ -23,29 +24,29 @@ void Labirinth::setWall(int x, int y)
         return;
     }
 
-    labirinthMap[y][x] = Cell::WALL;
+    map[y][x] = Cell::WALL;
 }
 
 void Labirinth::setPlayer(int x, int y)
 {
-    labirinthMap[pY][pX] = Cell::EMPTY;
-    labirinthMap[y][x] = Cell::PLAYER;
+    map[pY][pX] = Cell::EMPTY;
+    map[y][x] = Cell::PLAYER;
     pX = x;
     pY = y;
 }
 
 void Labirinth::setExit(int x, int y)
 {
-    labirinthMap[eY][eX] = Cell::EMPTY;
-    labirinthMap[y][x] = Cell::EXIT;
+    map[eY][eX] = Cell::EMPTY;
+    map[y][x] = Cell::EXIT;
     eX = x;
     eY = y;
 }
 
 void Labirinth::removeWall(int x, int y)
 {
-    if (labirinthMap[y][x] == Cell::WALL) {
-        labirinthMap[y][x] = Cell::EMPTY;
+    if (map[y][x] == Cell::WALL) {
+        map[y][x] = Cell::EMPTY;
     }
 }
 
@@ -77,7 +78,7 @@ QStandardItemModel* Labirinth::getModel() const
     model->setColumnCount(h);
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
-            Cell cell = labirinthMap[i][j];
+            Cell cell = map[i][j];
             QString ch = cellToString(cell);
             QStandardItem *item = new QStandardItem(ch);
             model->setItem(i, j, item);
@@ -89,7 +90,7 @@ QStandardItemModel* Labirinth::getModel() const
 
 QString Labirinth::getCh(int x, int y) const
 {
-    Labirinth::Cell cell = labirinthMap[y][x];
+    Labirinth::Cell cell = map[y][x];
     return cellToString(cell);
 }
 
@@ -101,11 +102,6 @@ int Labirinth::getPlayerX() const
 int Labirinth::getPlayerY() const
 {
     return pY;
-}
-
-void Labirinth::solve()
-{
-    qDebug() << "!";
 }
 
 QString Labirinth::cellToString(Labirinth::Cell cell)
@@ -120,7 +116,7 @@ QString Labirinth::cellToString(Labirinth::Cell cell)
     case Cell::PLAYER:
         return QString("♜");
     default:
-        return QString(static_cast<int>(cell));
+        return QString::number(static_cast<int>(cell));
     }
 }
 
@@ -136,4 +132,41 @@ Labirinth::Cell Labirinth::stringToCell(QString ch)
         return Cell::PLAYER;
 
     return Cell::WALL;
+}
+
+struct Point {
+   int x, y;
+   Point operator +(Point p) {
+       p += *this;
+       return p;
+   }
+
+   void operator +=(Point p) {
+       x += p.x;
+       y += p.y;
+   }
+};
+
+const Point direction[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+void Labirinth::solve()
+{
+    std::queue<Point> queue;
+    queue.push({pX, pY});
+    while (queue.size() != 0) {
+        Point p = queue.front();
+        queue.pop();
+        for (Point d : direction) {
+            Point cur = p + d;
+            while (0 <= cur.x && cur.x < w && 0 <= cur.y && cur.y < h &&
+                   map[cur.y][cur.x] == Cell::EMPTY) {
+                int step = static_cast<int>(map[p.y][p.x]) + 1;
+                map[cur.y][cur.x] = static_cast<Cell>(step);
+                queue.push(cur);
+                cur += d;
+            }
+        }
+
+    }
+    qDebug() << "!";
 }

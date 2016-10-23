@@ -20,6 +20,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_solve_clicked()
 {
     labirinth->solve();
+    updateMap();
 }
 
 void MainWindow::updateMap()

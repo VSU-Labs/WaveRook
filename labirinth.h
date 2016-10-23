@@ -25,7 +25,7 @@ public:
 
 private:
     enum class Cell {
-        EXIT = -3, WALL = -2, PLAYER = -1, EMPTY = 0
+        EXIT = -3, WALL = -2, PLAYER = 0, EMPTY = -1
     };
 
     static QString cellToString(Cell cell);
@@ -35,7 +35,7 @@ private:
     int pY = 0;
     int eX = 1;
     int eY = 1;
-    std::vector<std::vector<Cell>> labirinthMap;
+    std::vector<std::vector<Cell>> map;
 };
 
 #endif // LABIRINTH_H
