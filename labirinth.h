@@ -22,14 +22,20 @@ public:
     int getPlayerY() const;
 
     void solve();
+    void clear();
 
 private:
     enum class Cell {
         EXIT = -3, WALL = -2, PLAYER = 0, EMPTY = -1
     };
+    struct Point;
 
     static QString cellToString(Cell cell);
     static Cell stringToCell(QString ch);
+
+    bool pointInMap(Point p);
+    bool isEmpty(Point p);
+private:
     int w, h;
     int pX = 0;
     int pY = 0;

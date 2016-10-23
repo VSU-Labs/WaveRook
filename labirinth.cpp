@@ -134,7 +134,7 @@ Labirinth::Cell Labirinth::stringToCell(QString ch)
     return Cell::WALL;
 }
 
-struct Point {
+struct Labirinth::Point {
    int x, y;
    Point operator +(Point p) {
        p += *this;
@@ -147,19 +147,32 @@ struct Point {
    }
 };
 
-const Point direction[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+bool Labirinth::pointInMap(Labirinth::Point p)
+{
+    return 0 <= p.x && p.x < w &&
+            0 <= p.y && p.y < h;
+}
+
+bool Labirinth::isEmpty(Labirinth::Point p)
+{
+    return map[p.y][p.x] == Cell::EMPTY;
+}
+
 
 void Labirinth::solve()
 {
+    clear();
+
+    const Labirinth::Point direction[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
     std::queue<Point> queue;
     queue.push({pX, pY});
+
     while (queue.size() != 0) {
         Point p = queue.front();
         queue.pop();
         for (Point d : direction) {
             Point cur = p + d;
-            while (0 <= cur.x && cur.x < w && 0 <= cur.y && cur.y < h &&
-                   map[cur.y][cur.x] == Cell::EMPTY) {
+            while (pointInMap(cur) && isEmpty(cur)) {
                 int step = static_cast<int>(map[p.y][p.x]) + 1;
                 map[cur.y][cur.x] = static_cast<Cell>(step);
                 queue.push(cur);
@@ -169,4 +182,16 @@ void Labirinth::solve()
 
     }
     qDebug() << "!";
+}
+
+void Labirinth::clear()
+{
+    for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+            int val = static_cast<int>(map[y][x]);
+            if (val > 0) {
+                map[y][x] = Cell::EMPTY;
+            }
+        }
+    }
 }
